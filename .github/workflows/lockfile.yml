@@ -1,0 +1,29 @@
+name: lockfile
+
+on:
+  push:
+    branches: [bootstrap/lockfile]
+
+permissions: {}
+
+jobs:
+  lock:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - run: npm install --package-lock-only --ignore-scripts
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: package-lock
+          path: package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: docker build --tag factory-test-web:ci .
