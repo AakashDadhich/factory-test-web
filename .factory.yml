@@ -1,0 +1,7 @@
+platform: web
+asvs_level: null
+web:
+  port: 3000
+  health_path: /health
+  openapi: openapi.yaml
+  dockerfile: Dockerfile
