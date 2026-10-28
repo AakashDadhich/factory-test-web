@@ -1,0 +1,26 @@
+{
+  "name": "factory-test-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Small Express app that the Security Software Factory runs against",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "test": "tsc && node --test \"dist/test/**/*.test.js\""
+  },
+  "dependencies": {
+    "express": "5.3.0",
+    "helmet": "8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "22.20.5",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.1",
+    "typescript": "7.0.2"
+  }
+}
