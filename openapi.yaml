@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: factory-test-web
+  version: 0.1.0
+  description: Small Express app that the Security Software Factory runs against.
+servers:
+  - url: http://localhost:3000
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness check
+      responses:
+        "200":
+          description: The app is up.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    const: ok
+  /api/greeting:
+    get:
+      operationId: getGreeting
+      summary: Greet someone by name
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: "^[A-Za-z]{1,40}$"
+            minLength: 1
+            maxLength: 40
+          example: Ada
+      responses:
+        "200":
+          description: A greeting.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: The name is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
