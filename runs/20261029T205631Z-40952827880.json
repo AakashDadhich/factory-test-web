@@ -1,0 +1,19 @@
+{
+  "run_id": "40952827880",
+  "mode": "check",
+  "ref": "refs/pull/6/merge",
+  "commit": "e073bead68297feaa2b0e3a9f98a17e103f68c8d",
+  "status": "fail",
+  "counts": {
+    "critical": 0,
+    "high": 1,
+    "medium": 1,
+    "low": 0,
+    "info": 0
+  },
+  "blocking_fingerprints": [
+    "b91751396479ec46a8c8ada0b611da610c8996d51e04b8c073477dea82e51e65"
+  ],
+  "iteration": 0,
+  "issue": null
+}
