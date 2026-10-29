@@ -1,17 +1,21 @@
 {
-  "run_id": "40832975062-1",
+  "run_id": "40858629994-1",
   "mode": "check",
   "platform": "web",
   "iteration": 0,
   "issue": null,
   "repo": "AakashDadhich/factory-test-web",
-  "commit_sha": "9db6cb8007c6834dcfb0b41981a8726bcc809e55",
+  "commit_sha": "8efdd6a424dd59115b6acdd3217b9b7f108fb06d",
   "factory_ref": "main",
   "asvs_level": 2,
   "stages": [
     {
       "name": "setup",
       "status": "success"
+    },
+    {
+      "name": "plan",
+      "status": "pending"
     },
     {
       "name": "passthrough",
