@@ -1,0 +1,57 @@
+{
+  "run_id": "40831658255-1",
+  "mode": "check",
+  "platform": "web",
+  "iteration": 0,
+  "issue": null,
+  "repo": "AakashDadhich/factory-test-web",
+  "commit_sha": "475209047f97260d7910e053912cf51830b174ea",
+  "factory_ref": "main",
+  "asvs_level": 2,
+  "stages": [
+    {
+      "name": "setup",
+      "status": "success"
+    },
+    {
+      "name": "passthrough",
+      "status": "pending"
+    },
+    {
+      "name": "hello-ai",
+      "status": "pending"
+    },
+    {
+      "name": "secrets",
+      "status": "pending"
+    },
+    {
+      "name": "sast-semgrep",
+      "status": "pending"
+    },
+    {
+      "name": "sast-codeql",
+      "status": "pending"
+    },
+    {
+      "name": "sast-eslint",
+      "status": "pending"
+    },
+    {
+      "name": "deps-sbom",
+      "status": "pending"
+    },
+    {
+      "name": "dast-web",
+      "status": "pending"
+    },
+    {
+      "name": "gate",
+      "status": "pending"
+    }
+  ],
+  "tool_versions": {
+    "python": "3.12.15",
+    "security-factory": "0.1.0"
+  }
+}
