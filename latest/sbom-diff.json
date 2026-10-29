@@ -5,10 +5,10 @@
     {
       "name": "helmet",
       "old_versions": [
-        "8.3.0"
+        "8.2.0"
       ],
       "new_versions": [
-        "8.2.0"
+        "8.3.0"
       ]
     }
   ]
