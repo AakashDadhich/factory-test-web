@@ -1,11 +1,11 @@
 {
-  "run_id": "40858629994-1",
+  "run_id": "40955050790-1",
   "mode": "check",
   "platform": "web",
   "iteration": 0,
   "issue": null,
   "repo": "AakashDadhich/factory-test-web",
-  "commit_sha": "8efdd6a424dd59115b6acdd3217b9b7f108fb06d",
+  "commit_sha": "2e20451cbe6684a6eb3214735d311b1fa48ee09e",
   "factory_ref": "main",
   "asvs_level": 2,
   "stages": [
@@ -15,6 +15,22 @@
     },
     {
       "name": "plan",
+      "status": "pending"
+    },
+    {
+      "name": "threat-model",
+      "status": "pending"
+    },
+    {
+      "name": "codegen-ai",
+      "status": "pending"
+    },
+    {
+      "name": "codegen-commit",
+      "status": "pending"
+    },
+    {
+      "name": "review",
       "status": "pending"
     },
     {
