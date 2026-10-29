@@ -1,0 +1,26 @@
+{
+  "run_id": "40955072946",
+  "mode": "spec",
+  "ref": "refs/heads/main",
+  "commit": "2e20451cbe6684a6eb3214735d311b1fa48ee09e",
+  "status": "fail",
+  "counts": {
+    "critical": 8,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 24
+  },
+  "blocking_fingerprints": [
+    "5f2423208e8fd9534e9519cbf70567e8c01963bcc216230fca27064473ed4634",
+    "77fa3504003b02e42b7cb8cd393bfd062ae41f2bd56df8cc5e0dd9d7565b1b03",
+    "8e8d4c71e6d49188574f8d50e47761b4f568e7621575d3a793ba204cbdd6a747",
+    "914a12c5b9b36007fbd865457aecd5bb42845e4bfa2e1387214fef6ed740bfec",
+    "a83a516216911f71a2d7683d4bd1456595e5d1126c9b57f80df43c7d1755b6eb",
+    "c1f894d85386c8ec495f58aaaaf9556679429507200a794386c3b1302f3a0a0d",
+    "ccf3486259ead1651378371dcaf2f6e435a075d43b75d0667a4ede354bc5a91b",
+    "efff4fee12fb7a7c951457d25056a34185d46337199269651e53a4deeae75ea8"
+  ],
+  "iteration": 0,
+  "issue": 7
+}
