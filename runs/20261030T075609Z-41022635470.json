@@ -1,0 +1,17 @@
+{
+  "run_id": "41022635470",
+  "mode": "check",
+  "ref": "refs/heads/main",
+  "commit": "66a93ce66916ffe1f3dc6fd5a8850257ff846b33",
+  "status": "pass",
+  "counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 0,
+    "info": 11
+  },
+  "blocking_fingerprints": [],
+  "iteration": 0,
+  "issue": null
+}

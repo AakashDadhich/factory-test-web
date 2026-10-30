@@ -1,1 +1,338 @@
-[]
+[
+  {
+    "id": "sast-eslint:e1db2d582f9d01f51ddca003d0cef280cbd4c83b960402b9c53f9bdaf0dcda52",
+    "stage": "sast-eslint",
+    "tool": "eslint",
+    "source": "scanner",
+    "rule_id": "security/detect-object-injection",
+    "title": "Detects \"variable[key]\" as a left- or right-hand assignment operand.",
+    "severity": "medium",
+    "location": {
+      "path": "test/notes.test.ts",
+      "start_line": 22,
+      "end_line": 22
+    },
+    "cwe": [],
+    "description": "Generic Object Injection Sink",
+    "remediation": "",
+    "fingerprint": "e1db2d582f9d01f51ddca003d0cef280cbd4c83b960402b9c53f9bdaf0dcda52",
+    "tools": [
+      "eslint"
+    ],
+    "stages": [
+      "sast-eslint"
+    ],
+    "merged_fingerprints": [
+      "e1db2d582f9d01f51ddca003d0cef280cbd4c83b960402b9c53f9bdaf0dcda52"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:10deacfac7888fff8ce0d1ff6a456d8b7f863d0f1e73874c98d779178d48fcf0",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-015",
+    "title": "Data disclosure: Note text cached by browsers or proxies and visible to later users of the device",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Responses carrying private note text could be stored in the browser cache, back/forward cache or a shared proxy. On a shared device, another person could then read a previous user's notes after sign-out.\n\nFramework linddun, element 'Notes response', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Send Cache-Control: no-store on all authenticated notes responses. (ASVS V14.3.2, V14.2.5)",
+    "fingerprint": "10deacfac7888fff8ce0d1ff6a456d8b7f863d0f1e73874c98d779178d48fcf0",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "10deacfac7888fff8ce0d1ff6a456d8b7f863d0f1e73874c98d779178d48fcf0"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:2abcdd13b3b68ea8c8df6c0b02c73cf0d61c3cb381dbeba1249c15b253ea63a4",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-014",
+    "title": "Non compliance: Deleted notes and deleted accounts leave note data behind with no retention limit",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "The plan does not say what happens to notes when a user deletes a note or their account. Soft deletes, backups or orphaned rows could keep personal content indefinitely. This breaks erasure and storage-limitation duties such as GDPR Art. 17 and Art. 5(1)(e).\n\nFramework linddun, element 'Notes DB', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Hard-delete notes when the user deletes them, and cascade-delete all notes when the account is deleted. Define a retention period for backups and purge expired data. (ASVS V14.2.7, V14.1.2)",
+    "fingerprint": "2abcdd13b3b68ea8c8df6c0b02c73cf0d61c3cb381dbeba1249c15b253ea63a4",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "2abcdd13b3b68ea8c8df6c0b02c73cf0d61c3cb381dbeba1249c15b253ea63a4"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:39c788d470903ebfd50f5e66d81fc3c780e0e99491d85ed5e45128fea989261f",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-008",
+    "title": "Repudiation: Denied access and note changes are not logged or attributable",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Security events are written to stdout without tamper protection, and logging note text would itself leak private content.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Log security events with user id, note id, action, outcome and timestamp, and exclude note text. (ASVS V16.3.1, V16.3.2, V16.2.1, V14.2.4)\n- Protect logs from tampering and injection by encoding or sanitizing logged values. (ASVS V16.4.1, V16.4.2)",
+    "fingerprint": "39c788d470903ebfd50f5e66d81fc3c780e0e99491d85ed5e45128fea989261f",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "39c788d470903ebfd50f5e66d81fc3c780e0e99491d85ed5e45128fea989261f"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:464671a981d75b7475ee5b8b33d80c66372dfd36abfcf50c99265315674f5df4",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-010",
+    "title": "Information disclosure: Notes DB contents exposed at rest or in transit",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Private note text is stored in the database. Without protection of database credentials, file access and the connection, an attacker with host or network access can read all notes. The flow is listed with HTTPS but is internal.\n\nFramework stride, element 'Read note result', likelihood low, impact high, rated medium.",
+    "remediation": "- Restrict database file and credential access to the app account and protect secrets outside source code. (ASVS V13.3.1, V14.1.2)\n- Encrypt the database connection if it is remote, and consider encryption at rest for sensitive note text. (ASVS V12.3.1, V14.1.1)",
+    "fingerprint": "464671a981d75b7475ee5b8b33d80c66372dfd36abfcf50c99265315674f5df4",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "464671a981d75b7475ee5b8b33d80c66372dfd36abfcf50c99265315674f5df4"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:4eadc8d41867555a75f71f20ccecd6ec45dc3c1a171523134e0d7f5e9040c989",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-011",
+    "title": "Denial of service: Oversized or high-volume note requests exhaust the service",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Clients send very large note bodies or flood create and list requests. Rate limiting is per user in process memory and only runs after authentication, and its window map is cleared wholesale when it grows large, so an attacker can reset counters. Anonymous floods and body size at the JSON parser are not limited by this code.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Limit request body size and note length, and apply rate limiting plus a per-user note quota. (ASVS V2.1.1, V2.4.1, V15.2.2)\n- Paginate the list endpoint. (ASVS V15.2.2)",
+    "fingerprint": "4eadc8d41867555a75f71f20ccecd6ec45dc3c1a171523134e0d7f5e9040c989",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "4eadc8d41867555a75f71f20ccecd6ec45dc3c1a171523134e0d7f5e9040c989"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:551bd81562e7d1805e071eb0cff112531c5decd6ff633081b9045f41b02b63b6",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-013",
+    "title": "Data disclosure: Private note text stored in plaintext and exposed through DB access or backups",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Notes are sensitive free text and may hold health, financial or relationship details. They are stored unencrypted in Notes DB. Anyone with DB, snapshot or backup access can read every user's notes, including operators who have no need to see them. The plan leaves encryption at rest as an open question.\n\nFramework linddun, element 'Notes DB', likelihood medium, impact high, rated high.",
+    "remediation": "- Encrypt the note text column or the database volume at rest. Keep keys outside the database and restrict DB and backup access to least privilege. (ASVS V14.1.2, V14.2.1, V11.3.1)",
+    "fingerprint": "551bd81562e7d1805e071eb0cff112531c5decd6ff633081b9045f41b02b63b6",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "551bd81562e7d1805e071eb0cff112531c5decd6ff633081b9045f41b02b63b6"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:59ec17a4f346ce2ca6fc900cbafd8ffad558517b1e521ba0ab0e30f29c5cf2f9",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-016",
+    "title": "Data disclosure: Note text leaks into logs, error messages or telemetry",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Request bodies, validation errors or DB errors may be written to application logs or returned in error responses. Log readers who should not see private notes would then have access to them, and the logs would outlive the notes themselves.\n\nFramework linddun, element 'Web app', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Log only user id, note id and outcome. Never log note text or request bodies, and return generic error messages to clients. (ASVS V16.2.5, V16.5.1, V14.2.4)",
+    "fingerprint": "59ec17a4f346ce2ca6fc900cbafd8ffad558517b1e521ba0ab0e30f29c5cf2f9",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "59ec17a4f346ce2ca6fc900cbafd8ffad558517b1e521ba0ab0e30f29c5cf2f9"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:75bc1a782044673117998ff1863ba59dc648e0a36fbe7515edcd1dd316353f27",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-007",
+    "title": "Tampering: SQL injection through note text or id",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes. The current store is in memory, but a persistent database store will replace it and must not build queries from strings.\n\nFramework stride, element 'Store note query', likelihood medium, impact high, rated high.",
+    "remediation": "- Use parameterized statements for all queries and validate the id type. (ASVS V1.2.4, V2.2.1)",
+    "fingerprint": "75bc1a782044673117998ff1863ba59dc648e0a36fbe7515edcd1dd316353f27",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "75bc1a782044673117998ff1863ba59dc648e0a36fbe7515edcd1dd316353f27"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:9325879e0060e6be31b6d04d64de60ede7975887dcd714beaab123e81c0db018",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-018",
+    "title": "Unawareness: Users are not told how their notes are stored, kept or deleted, and cannot export them",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Users enter sensitive content, but the design includes no privacy notice. It does not say whether notes are encrypted, how long they are kept, or what happens on account deletion, and it gives no way to export or erase all of their notes. Users cannot make informed choices or exercise their data rights.\n\nFramework linddun, element 'Signed-in user', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Document the personal data stored, its purpose, retention and deletion behaviour, and show this to users. Provide a way to export and delete all of their own notes. (ASVS V14.1.1, V14.2.7)",
+    "fingerprint": "9325879e0060e6be31b6d04d64de60ede7975887dcd714beaab123e81c0db018",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "9325879e0060e6be31b6d04d64de60ede7975887dcd714beaab123e81c0db018"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:da8b95c65f09cbbdca7f74b2c539811de35a45b92ec80cdb2fc5e525f8f16437",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-001",
+    "title": "Spoofing: Session hijack or forgery lets attacker act as a note owner",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Session identifiers travel with each notes request. The notes router trusts an injected session resolver, and the code does not set cookie attributes or session lifetime. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.\n\nFramework stride, element 'Notes request', likelihood medium, impact high, rated high.",
+    "remediation": "- Use high-entropy random session ids and set Secure, HttpOnly and SameSite cookie attributes; expire sessions on logout and idle timeout. (ASVS V7.2.1, V7.2.3, V3.3.1, V7.4.1)\n- Serve all notes endpoints over TLS only and send HSTS. (ASVS V12.2.1, V3.4.1)",
+    "fingerprint": "da8b95c65f09cbbdca7f74b2c539811de35a45b92ec80cdb2fc5e525f8f16437",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "da8b95c65f09cbbdca7f74b2c539811de35a45b92ec80cdb2fc5e525f8f16437"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:ec43257ebeab8ce6d49e291956987d52737932d0d602472f32aa1910da636eac",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-017",
+    "title": "Data disclosure: Note text sent to the database over an unprotected connection",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "The app-to-DB flow has no stated transport protection. If the database is remote or on a shared network, note text can be read in transit by anyone on that path.\n\nFramework linddun, element 'Store note query', likelihood low, impact high, rated medium.",
+    "remediation": "- Require TLS with certificate verification for the database connection, or restrict the DB to a local socket or private network. (ASVS V12.3.1, V12.3.3)",
+    "fingerprint": "ec43257ebeab8ce6d49e291956987d52737932d0d602472f32aa1910da636eac",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "ec43257ebeab8ce6d49e291956987d52737932d0d602472f32aa1910da636eac"
+    ],
+    "suppressed": false
+  }
+]

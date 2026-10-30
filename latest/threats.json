@@ -1,0 +1,488 @@
+{
+  "model_version": "2bd397f13cc7807b793f415aec335b4c66577307f6e1eb0c14bda9c264cf70f9",
+  "threats": [
+    {
+      "id": "TM-013",
+      "framework": "linddun",
+      "category": "data-disclosure",
+      "element": "Notes DB",
+      "title": "Private note text stored in plaintext and exposed through DB access or backups",
+      "description": "Notes are sensitive free text and may hold health, financial or relationship details. They are stored unencrypted in Notes DB. Anyone with DB, snapshot or backup access can read every user's notes, including operators who have no need to see them. The plan leaves encryption at rest as an open question.",
+      "likelihood": "medium",
+      "impact": "high",
+      "severity": "high",
+      "mitigations": [
+        {
+          "id": "TM-013-M1",
+          "text": "Encrypt the note text column or the database volume at rest. Keep keys outside the database and restrict DB and backup access to least privilege.",
+          "asvs_refs": [
+            "V14.1.2",
+            "V14.2.1",
+            "V11.3.1"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-014",
+      "framework": "linddun",
+      "category": "non-compliance",
+      "element": "Notes DB",
+      "title": "Deleted notes and deleted accounts leave note data behind with no retention limit",
+      "description": "The plan does not say what happens to notes when a user deletes a note or their account. Soft deletes, backups or orphaned rows could keep personal content indefinitely. This breaks erasure and storage-limitation duties such as GDPR Art. 17 and Art. 5(1)(e).",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-014-M1",
+          "text": "Hard-delete notes when the user deletes them, and cascade-delete all notes when the account is deleted. Define a retention period for backups and purge expired data.",
+          "asvs_refs": [
+            "V14.2.7",
+            "V14.1.2"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-015",
+      "framework": "linddun",
+      "category": "data-disclosure",
+      "element": "Notes response",
+      "title": "Note text cached by browsers or proxies and visible to later users of the device",
+      "description": "Responses carrying private note text could be stored in the browser cache, back/forward cache or a shared proxy. On a shared device, another person could then read a previous user's notes after sign-out.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-015-M1",
+          "text": "Send Cache-Control: no-store on all authenticated notes responses.",
+          "asvs_refs": [
+            "V14.3.2",
+            "V14.2.5"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-016",
+      "framework": "linddun",
+      "category": "data-disclosure",
+      "element": "Web app",
+      "title": "Note text leaks into logs, error messages or telemetry",
+      "description": "Request bodies, validation errors or DB errors may be written to application logs or returned in error responses. Log readers who should not see private notes would then have access to them, and the logs would outlive the notes themselves.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-016-M1",
+          "text": "Log only user id, note id and outcome. Never log note text or request bodies, and return generic error messages to clients.",
+          "asvs_refs": [
+            "V16.2.5",
+            "V16.5.1",
+            "V14.2.4"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-017",
+      "framework": "linddun",
+      "category": "data-disclosure",
+      "element": "Store note query",
+      "title": "Note text sent to the database over an unprotected connection",
+      "description": "The app-to-DB flow has no stated transport protection. If the database is remote or on a shared network, note text can be read in transit by anyone on that path.",
+      "likelihood": "low",
+      "impact": "high",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-017-M1",
+          "text": "Require TLS with certificate verification for the database connection, or restrict the DB to a local socket or private network.",
+          "asvs_refs": [
+            "V12.3.1",
+            "V12.3.3"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-018",
+      "framework": "linddun",
+      "category": "unawareness",
+      "element": "Signed-in user",
+      "title": "Users are not told how their notes are stored, kept or deleted, and cannot export them",
+      "description": "Users enter sensitive content, but the design includes no privacy notice. It does not say whether notes are encrypted, how long they are kept, or what happens on account deletion, and it gives no way to export or erase all of their notes. Users cannot make informed choices or exercise their data rights.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-018-M1",
+          "text": "Document the personal data stored, its purpose, retention and deletion behaviour, and show this to users. Provide a way to export and delete all of their own notes.",
+          "asvs_refs": [
+            "V14.1.1",
+            "V14.2.7"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-001",
+      "framework": "stride",
+      "category": "spoofing",
+      "element": "Notes request",
+      "title": "Session hijack or forgery lets attacker act as a note owner",
+      "description": "Session identifiers travel with each notes request. The notes router trusts an injected session resolver, and the code does not set cookie attributes or session lifetime. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.",
+      "likelihood": "medium",
+      "impact": "high",
+      "severity": "high",
+      "mitigations": [
+        {
+          "id": "TM-001-M1",
+          "text": "Use high-entropy random session ids and set Secure, HttpOnly and SameSite cookie attributes; expire sessions on logout and idle timeout.",
+          "asvs_refs": [
+            "V7.2.1",
+            "V7.2.3",
+            "V3.3.1",
+            "V7.4.1"
+          ]
+        },
+        {
+          "id": "TM-001-M2",
+          "text": "Serve all notes endpoints over TLS only and send HSTS.",
+          "asvs_refs": [
+            "V12.2.1",
+            "V3.4.1"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-002",
+      "framework": "stride",
+      "category": "tampering",
+      "element": "Notes request",
+      "title": "Forged owner_id or cross-site request plants or changes notes",
+      "description": "An attacker sends a create or update request with a forged owner_id field, or tricks a signed-in user's browser into a cross-origin POST/PUT/DELETE without a CSRF token, planting or altering notes under the victim's account.",
+      "likelihood": "high",
+      "impact": "high",
+      "severity": "critical",
+      "mitigations": [
+        {
+          "id": "TM-002-M1",
+          "text": "Take owner id only from the server-side session and ignore any client-supplied owner fields.",
+          "asvs_refs": [
+            "V8.2.2",
+            "V2.2.1"
+          ]
+        },
+        {
+          "id": "TM-002-M2",
+          "text": "Require a CSRF token or SameSite cookies plus Origin checking on all state-changing notes requests.",
+          "asvs_refs": [
+            "V3.5.1",
+            "V3.3.2"
+          ]
+        },
+        {
+          "id": "TM-002-M3",
+          "text": "Validate note text as a non-empty string within a maximum length and reject unexpected fields.",
+          "asvs_refs": [
+            "V2.2.1",
+            "V2.1.1"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    },
+    {
+      "id": "TM-003",
+      "framework": "stride",
+      "category": "information-disclosure",
+      "element": "Notes request",
+      "title": "Insecure direct object reference exposes other users' notes",
+      "description": "An attacker changes the note id in GET requests or enumerates ids to read another user's private notes. The list endpoint could also return notes unfiltered by owner.",
+      "likelihood": "high",
+      "impact": "high",
+      "severity": "critical",
+      "mitigations": [
+        {
+          "id": "TM-003-M1",
+          "text": "Filter every read and list query by the session owner id and return 404 for notes the caller does not own.",
+          "asvs_refs": [
+            "V8.2.2",
+            "V8.3.1",
+            "V4.2.1"
+          ]
+        },
+        {
+          "id": "TM-003-M2",
+          "text": "Do not rely on id secrecy; use unguessable ids as defence in depth.",
+          "asvs_refs": [
+            "V8.2.2"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    },
+    {
+      "id": "TM-004",
+      "framework": "stride",
+      "category": "elevation-of-privilege",
+      "element": "Web app",
+      "title": "Missing ownership check on edit and delete lets users modify others' notes",
+      "description": "A user sends PUT or DELETE with a victim's note id, or includes an owner_id field to reassign a note. Without an ownership check on every write, they gain write access to notes they do not own.",
+      "likelihood": "high",
+      "impact": "high",
+      "severity": "critical",
+      "mitigations": [
+        {
+          "id": "TM-004-M1",
+          "text": "Enforce ownership in the data-access layer on every update and delete, with the owner id in the query condition, and never allow owner reassignment.",
+          "asvs_refs": [
+            "V8.2.2",
+            "V8.3.1",
+            "V8.2.1"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    },
+    {
+      "id": "TM-005",
+      "framework": "stride",
+      "category": "elevation-of-privilege",
+      "element": "Anonymous request",
+      "title": "Unauthenticated access to notes endpoints",
+      "description": "An anonymous visitor calls notes endpoints without a session. If any route lacks the authentication middleware, they can read or write notes.",
+      "likelihood": "medium",
+      "impact": "high",
+      "severity": "high",
+      "mitigations": [
+        {
+          "id": "TM-005-M1",
+          "text": "Apply authentication middleware to all notes routes by default and return 401 with no data when no valid session exists.",
+          "asvs_refs": [
+            "V8.2.1",
+            "V8.1.1",
+            "V4.1.1"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    },
+    {
+      "id": "TM-006",
+      "framework": "stride",
+      "category": "tampering",
+      "element": "Web app",
+      "title": "Stored script in note text executes in the browser (XSS)",
+      "description": "An attacker saves a note with HTML or script content. If the app renders it as HTML without encoding, it runs in the owner's session and can steal data or perform actions.",
+      "likelihood": "medium",
+      "impact": "high",
+      "severity": "high",
+      "mitigations": [
+        {
+          "id": "TM-006-M1",
+          "text": "Return notes as JSON or plain text, or output-encode contextually when rendering HTML.",
+          "asvs_refs": [
+            "V1.2.1",
+            "V1.1.2"
+          ]
+        },
+        {
+          "id": "TM-006-M2",
+          "text": "Set X-Content-Type-Options nosniff and a restrictive Content-Security-Policy.",
+          "asvs_refs": [
+            "V3.4.4",
+            "V3.4.3"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/app.ts"
+    },
+    {
+      "id": "TM-007",
+      "framework": "stride",
+      "category": "tampering",
+      "element": "Store note query",
+      "title": "SQL injection through note text or id",
+      "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes. The current store is in memory, but a persistent database store will replace it and must not build queries from strings.",
+      "likelihood": "medium",
+      "impact": "high",
+      "severity": "high",
+      "mitigations": [
+        {
+          "id": "TM-007-M1",
+          "text": "Use parameterized statements for all queries and validate the id type.",
+          "asvs_refs": [
+            "V1.2.4",
+            "V2.2.1"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-008",
+      "framework": "stride",
+      "category": "repudiation",
+      "element": "Web app",
+      "title": "Denied access and note changes are not logged or attributable",
+      "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Security events are written to stdout without tamper protection, and logging note text would itself leak private content.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-008-M1",
+          "text": "Log security events with user id, note id, action, outcome and timestamp, and exclude note text.",
+          "asvs_refs": [
+            "V16.3.1",
+            "V16.3.2",
+            "V16.2.1",
+            "V14.2.4"
+          ]
+        },
+        {
+          "id": "TM-008-M2",
+          "text": "Protect logs from tampering and injection by encoding or sanitizing logged values.",
+          "asvs_refs": [
+            "V16.4.1",
+            "V16.4.2"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-009",
+      "framework": "stride",
+      "category": "information-disclosure",
+      "element": "Notes response",
+      "title": "Note text or errors leak data in responses",
+      "description": "Verbose errors, stack traces or cacheable responses can expose private note text or internals to the user, shared caches or the browser history.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-009-M1",
+          "text": "Send Cache-Control no-store on notes responses and return generic error messages without stack traces.",
+          "asvs_refs": [
+            "V14.3.2",
+            "V16.5.1"
+          ]
+        },
+        {
+          "id": "TM-009-M2",
+          "text": "Return only the required note fields.",
+          "asvs_refs": [
+            "V15.3.1"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    },
+    {
+      "id": "TM-010",
+      "framework": "stride",
+      "category": "information-disclosure",
+      "element": "Read note result",
+      "title": "Notes DB contents exposed at rest or in transit",
+      "description": "Private note text is stored in the database. Without protection of database credentials, file access and the connection, an attacker with host or network access can read all notes. The flow is listed with HTTPS but is internal.",
+      "likelihood": "low",
+      "impact": "high",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-010-M1",
+          "text": "Restrict database file and credential access to the app account and protect secrets outside source code.",
+          "asvs_refs": [
+            "V13.3.1",
+            "V14.1.2"
+          ]
+        },
+        {
+          "id": "TM-010-M2",
+          "text": "Encrypt the database connection if it is remote, and consider encryption at rest for sensitive note text.",
+          "asvs_refs": [
+            "V12.3.1",
+            "V14.1.1"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-011",
+      "framework": "stride",
+      "category": "denial-of-service",
+      "element": "Web app",
+      "title": "Oversized or high-volume note requests exhaust the service",
+      "description": "Clients send very large note bodies or flood create and list requests. Rate limiting is per user in process memory and only runs after authentication, and its window map is cleared wholesale when it grows large, so an attacker can reset counters. Anonymous floods and body size at the JSON parser are not limited by this code.",
+      "likelihood": "medium",
+      "impact": "medium",
+      "severity": "medium",
+      "mitigations": [
+        {
+          "id": "TM-011-M1",
+          "text": "Limit request body size and note length, and apply rate limiting plus a per-user note quota.",
+          "asvs_refs": [
+            "V2.1.1",
+            "V2.4.1",
+            "V15.2.2"
+          ]
+        },
+        {
+          "id": "TM-011-M2",
+          "text": "Paginate the list endpoint.",
+          "asvs_refs": [
+            "V15.2.2"
+          ]
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "TM-012",
+      "framework": "stride",
+      "category": "information-disclosure",
+      "element": "Unauthorized response",
+      "title": "Unauthorized responses reveal whether a note or account exists",
+      "description": "Differing status codes or messages for missing versus forbidden resources let an attacker enumerate valid note ids or users.",
+      "likelihood": "low",
+      "impact": "low",
+      "severity": "low",
+      "mitigations": [
+        {
+          "id": "TM-012-M1",
+          "text": "Return identical generic 401 or 404 responses without revealing existence or details.",
+          "asvs_refs": [
+            "V16.5.1",
+            "V8.2.2"
+          ]
+        }
+      ],
+      "status": "mitigated",
+      "evidence": "src/notes.ts"
+    }
+  ],
+  "removed": []
+}
