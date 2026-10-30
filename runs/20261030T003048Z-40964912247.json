@@ -1,0 +1,17 @@
+{
+  "run_id": "40964912247",
+  "mode": "check",
+  "ref": "refs/pull/9/merge",
+  "commit": "382626af5a7231279fce2ea5fd9b79bfde38cfcc",
+  "status": "pass",
+  "counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 7
+  },
+  "blocking_fingerprints": [],
+  "iteration": 0,
+  "issue": null
+}
