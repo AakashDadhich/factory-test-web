@@ -1,0 +1,148 @@
+{
+  "summary": "Add a notes feature for signed-in users. Users can create, list, read, edit and delete their own private text notes. Each note is bound to its owner and only the owner can access it.",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Create note",
+      "description": "A signed-in user saves a new private text note owned by them.",
+      "risk": "medium"
+    },
+    {
+      "id": "F2",
+      "name": "List and read notes",
+      "description": "A signed-in user lists and views only their own notes.",
+      "risk": "medium"
+    },
+    {
+      "id": "F3",
+      "name": "Edit and delete note",
+      "description": "A signed-in user updates or deletes only their own notes.",
+      "risk": "medium"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "All notes endpoints require an authenticated session.",
+      "testable_check": "Call each notes endpoint without a session; expect 401 and no data returned.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R2",
+      "text": "Each note stores its owner id, taken from the session, never from client input.",
+      "testable_check": "POST a note with an extra owner_id field for another user; the stored note belongs to the session user.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R3",
+      "text": "A user can read a note only if they own it.",
+      "testable_check": "User B requests GET on user A's note id; expect 404 or 403 with no note content.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R4",
+      "text": "A user can update or delete a note only if they own it.",
+      "testable_check": "User B sends PUT and DELETE for user A's note; expect 404 or 403 and the note is unchanged.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R5",
+      "text": "The list endpoint returns only the caller's notes.",
+      "testable_check": "Users A and B each create notes; A's list contains none of B's notes.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R6",
+      "text": "Note text is validated: it must be a string, non-empty, and within a maximum length.",
+      "testable_check": "POST empty, non-string and oversize bodies; expect 400 and nothing stored.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R7",
+      "text": "Note content is output-encoded or returned as JSON/plain text so stored markup cannot execute.",
+      "testable_check": "Save a note containing <script>; the response has a non-HTML content type or the page renders it as inert text.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R8",
+      "text": "Queries use parameterized statements.",
+      "testable_check": "Send SQL metacharacters in note text and id; expect no error and no data leakage.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R9",
+      "text": "State-changing requests are protected against CSRF when cookie sessions are used.",
+      "testable_check": "POST a note from a cross-origin request without the CSRF token; expect rejection.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R10",
+      "text": "Security events (denied access, auth failures) are logged without note content.",
+      "testable_check": "Trigger a cross-user access attempt; the log has user id, note id and outcome but not the note text.",
+      "asvs_refs": []
+    },
+    {
+      "id": "R11",
+      "text": "Note ids are not guessable, or access control does not rely on id secrecy.",
+      "testable_check": "Enumerate ids as another user; all return 404 or 403.",
+      "asvs_refs": []
+    }
+  ],
+  "data_handled": [
+    {
+      "name": "Note text (private user content)",
+      "classification": "sensitive"
+    },
+    {
+      "name": "User id and session identifier",
+      "classification": "internal"
+    },
+    {
+      "name": "Note metadata (timestamps, owner id)",
+      "classification": "internal"
+    }
+  ],
+  "users": [
+    "Signed-in user (note owner)",
+    "Anonymous visitor (no access)"
+  ],
+  "out_of_scope": [
+    "Sharing notes between users",
+    "Sign-up and sign-in implementation changes",
+    "Rich text, attachments or search",
+    "Admin access to notes",
+    "Payments"
+  ],
+  "risk_rating": "medium",
+  "stores_personal_data": true,
+  "takes_payments": false,
+  "abuse_cases": [
+    {
+      "feature_id": "F1",
+      "attacker_goal": "Plant a note under another user's account or inject script.",
+      "steps": "Send a create request with a forged owner_id or HTML/script content, or without a CSRF token.",
+      "mitigation": "Take owner from the session, validate input, encode output and enforce CSRF protection."
+    },
+    {
+      "feature_id": "F2",
+      "attacker_goal": "Read another user's private notes.",
+      "steps": "Change the note id in GET requests, enumerate ids, or call the list endpoint without a session.",
+      "mitigation": "Require auth and filter every query by owner id; return 404 for notes the caller does not own."
+    },
+    {
+      "feature_id": "F3",
+      "attacker_goal": "Modify or delete another user's notes.",
+      "steps": "Send PUT or DELETE with a victim's note id, or include an owner_id field to reassign a note.",
+      "mitigation": "Check ownership on every write, ignore client-supplied owner fields and log denied attempts."
+    }
+  ],
+  "open_questions": [
+    "Which existing authentication and session mechanism does the app use (cookies or tokens)?",
+    "What are the maximum note length and any per-user note limit?",
+    "Should notes be encrypted at rest beyond standard database protection?",
+    "Should deleting a user account also delete their notes?"
+  ],
+  "asvs_level": 2,
+  "personal_data": true,
+  "high_risk_features": []
+}

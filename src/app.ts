@@ -1,9 +1,24 @@
 import express, { type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
+import {
+  MemoryNoteStore,
+  createNotesRouter,
+  defaultSecurityLogger,
+  type NoteStore,
+  type SecurityLogger,
+  type SessionResolver,
+} from "./notes.js";
 
 const NAME_PATTERN = /^[A-Za-z]{1,40}$/;
 
-export function createApp(): express.Express {
+export interface AppOptions {
+  sessions?: SessionResolver;
+  store?: NoteStore;
+  allowedOrigins?: string[];
+  log?: SecurityLogger;
+}
+
+export function createApp(options: AppOptions = {}): express.Express {
   const app = express();
   app.disable("x-powered-by");
   app.use(helmet());
@@ -21,6 +36,17 @@ export function createApp(): express.Express {
     }
     res.json({ message: `Hello, ${name}!` });
   });
+
+  // Without an injected session resolver every notes request is denied.
+  app.use(
+    "/api/notes",
+    createNotesRouter({
+      sessions: options.sessions ?? (() => undefined),
+      store: options.store ?? new MemoryNoteStore(),
+      allowedOrigins: options.allowedOrigins ?? [],
+      log: options.log ?? defaultSecurityLogger,
+    }),
+  );
 
   app.use((_req, res) => {
     res.status(404).json({ error: "not found" });
