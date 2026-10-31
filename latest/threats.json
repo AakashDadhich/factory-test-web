@@ -1,5 +1,5 @@
 {
-  "model_version": "2bd397f13cc7807b793f415aec335b4c66577307f6e1eb0c14bda9c264cf70f9",
+  "model_version": "6df3778e1e9467fd663f8606008e5659dc4f06fae55d7c8a68af330f206761e2",
   "threats": [
     {
       "id": "TM-013",
@@ -141,7 +141,7 @@
       "category": "spoofing",
       "element": "Notes request",
       "title": "Session hijack or forgery lets attacker act as a note owner",
-      "description": "Session identifiers travel with each notes request. The notes router trusts an injected session resolver, and the code does not set cookie attributes or session lifetime. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.",
+      "description": "Session identifiers travel with each notes request. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.",
       "likelihood": "medium",
       "impact": "high",
       "severity": "high",
@@ -203,8 +203,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     },
     {
       "id": "TM-003",
@@ -234,8 +233,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     },
     {
       "id": "TM-004",
@@ -258,8 +256,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     },
     {
       "id": "TM-005",
@@ -282,8 +279,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     },
     {
       "id": "TM-006",
@@ -313,8 +309,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/app.ts"
+      "status": "open"
     },
     {
       "id": "TM-007",
@@ -322,7 +317,7 @@
       "category": "tampering",
       "element": "Store note query",
       "title": "SQL injection through note text or id",
-      "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes. The current store is in memory, but a persistent database store will replace it and must not build queries from strings.",
+      "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes.",
       "likelihood": "medium",
       "impact": "high",
       "severity": "high",
@@ -344,7 +339,7 @@
       "category": "repudiation",
       "element": "Web app",
       "title": "Denied access and note changes are not logged or attributable",
-      "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Security events are written to stdout without tamper protection, and logging note text would itself leak private content.",
+      "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Logging note text would itself leak private content.",
       "likelihood": "medium",
       "impact": "medium",
       "severity": "medium",
@@ -397,8 +392,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     },
     {
       "id": "TM-010",
@@ -436,7 +430,7 @@
       "category": "denial-of-service",
       "element": "Web app",
       "title": "Oversized or high-volume note requests exhaust the service",
-      "description": "Clients send very large note bodies or flood create and list requests. Rate limiting is per user in process memory and only runs after authentication, and its window map is cleared wholesale when it grows large, so an attacker can reset counters. Anonymous floods and body size at the JSON parser are not limited by this code.",
+      "description": "An authenticated or anonymous client sends very large note bodies or floods create and list requests, exhausting memory, CPU or database storage.",
       "likelihood": "medium",
       "impact": "medium",
       "severity": "medium",
@@ -480,8 +474,7 @@
           ]
         }
       ],
-      "status": "mitigated",
-      "evidence": "src/notes.ts"
+      "status": "open"
     }
   ],
   "removed": []

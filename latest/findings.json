@@ -28,6 +28,62 @@
     "suppressed": false
   },
   {
+    "id": "threat-model:0635809503d1541b2220be9f9d8351d396bf3191e32a337d772e9df3831ad618",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-005",
+    "title": "Elevation of privilege: Unauthenticated access to notes endpoints",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "An anonymous visitor calls notes endpoints without a session. If any route lacks the authentication middleware, they can read or write notes.\n\nFramework stride, element 'Anonymous request', likelihood medium, impact high, rated high.",
+    "remediation": "- Apply authentication middleware to all notes routes by default and return 401 with no data when no valid session exists. (ASVS V8.2.1, V8.1.1, V4.1.1)",
+    "fingerprint": "0635809503d1541b2220be9f9d8351d396bf3191e32a337d772e9df3831ad618",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "0635809503d1541b2220be9f9d8351d396bf3191e32a337d772e9df3831ad618"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:0d059a79ed186a8a446072313ca5993ee7f34d94a21b2e255bf53a021b4db272",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-002",
+    "title": "Tampering: Forged owner_id or cross-site request plants or changes notes",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "An attacker sends a create or update request with a forged owner_id field, or tricks a signed-in user's browser into a cross-origin POST/PUT/DELETE without a CSRF token, planting or altering notes under the victim's account.\n\nFramework stride, element 'Notes request', likelihood high, impact high, rated critical.",
+    "remediation": "- Take owner id only from the server-side session and ignore any client-supplied owner fields. (ASVS V8.2.2, V2.2.1)\n- Require a CSRF token or SameSite cookies plus Origin checking on all state-changing notes requests. (ASVS V3.5.1, V3.3.2)\n- Validate note text as a non-empty string within a maximum length and reject unexpected fields. (ASVS V2.2.1, V2.1.1)",
+    "fingerprint": "0d059a79ed186a8a446072313ca5993ee7f34d94a21b2e255bf53a021b4db272",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "0d059a79ed186a8a446072313ca5993ee7f34d94a21b2e255bf53a021b4db272"
+    ],
+    "suppressed": false
+  },
+  {
     "id": "threat-model:10deacfac7888fff8ce0d1ff6a456d8b7f863d0f1e73874c98d779178d48fcf0",
     "stage": "threat-model",
     "tool": "threat-model",
@@ -97,7 +153,7 @@
       "end_line": null
     },
     "cwe": [],
-    "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Security events are written to stdout without tamper protection, and logging note text would itself leak private content.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
+    "description": "Cross-user access attempts, auth failures and writes may go unlogged, so an attacker can deny the action and the owner cannot detect probing. Logging note text would itself leak private content.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
     "remediation": "- Log security events with user id, note id, action, outcome and timestamp, and exclude note text. (ASVS V16.3.1, V16.3.2, V16.2.1, V14.2.4)\n- Protect logs from tampering and injection by encoding or sanitizing logged values. (ASVS V16.4.1, V16.4.2)",
     "fingerprint": "39c788d470903ebfd50f5e66d81fc3c780e0e99491d85ed5e45128fea989261f",
     "tools": [
@@ -108,6 +164,34 @@
     ],
     "merged_fingerprints": [
       "39c788d470903ebfd50f5e66d81fc3c780e0e99491d85ed5e45128fea989261f"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:43036f2e2e7fd9e5630c178d331e97a241b0a93fe1494ab5e1af51811721c1cb",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-009",
+    "title": "Information disclosure: Note text or errors leak data in responses",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Verbose errors, stack traces or cacheable responses can expose private note text or internals to the user, shared caches or the browser history.\n\nFramework stride, element 'Notes response', likelihood medium, impact medium, rated medium.",
+    "remediation": "- Send Cache-Control no-store on notes responses and return generic error messages without stack traces. (ASVS V14.3.2, V16.5.1)\n- Return only the required note fields. (ASVS V15.3.1)",
+    "fingerprint": "43036f2e2e7fd9e5630c178d331e97a241b0a93fe1494ab5e1af51811721c1cb",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "43036f2e2e7fd9e5630c178d331e97a241b0a93fe1494ab5e1af51811721c1cb"
     ],
     "suppressed": false
   },
@@ -153,7 +237,7 @@
       "end_line": null
     },
     "cwe": [],
-    "description": "Clients send very large note bodies or flood create and list requests. Rate limiting is per user in process memory and only runs after authentication, and its window map is cleared wholesale when it grows large, so an attacker can reset counters. Anonymous floods and body size at the JSON parser are not limited by this code.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
+    "description": "An authenticated or anonymous client sends very large note bodies or floods create and list requests, exhausting memory, CPU or database storage.\n\nFramework stride, element 'Web app', likelihood medium, impact medium, rated medium.",
     "remediation": "- Limit request body size and note length, and apply rate limiting plus a per-user note quota. (ASVS V2.1.1, V2.4.1, V15.2.2)\n- Paginate the list endpoint. (ASVS V15.2.2)",
     "fingerprint": "4eadc8d41867555a75f71f20ccecd6ec45dc3c1a171523134e0d7f5e9040c989",
     "tools": [
@@ -237,7 +321,7 @@
       "end_line": null
     },
     "cwe": [],
-    "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes. The current store is in memory, but a persistent database store will replace it and must not build queries from strings.\n\nFramework stride, element 'Store note query', likelihood medium, impact high, rated high.",
+    "description": "Note text or note id containing SQL metacharacters is concatenated into a query, letting an attacker read, change or delete other users' notes.\n\nFramework stride, element 'Store note query', likelihood medium, impact high, rated high.",
     "remediation": "- Use parameterized statements for all queries and validate the id type. (ASVS V1.2.4, V2.2.1)",
     "fingerprint": "75bc1a782044673117998ff1863ba59dc648e0a36fbe7515edcd1dd316353f27",
     "tools": [
@@ -248,6 +332,62 @@
     ],
     "merged_fingerprints": [
       "75bc1a782044673117998ff1863ba59dc648e0a36fbe7515edcd1dd316353f27"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:76807e1721fdf6ad6a9e30f50ce077b5b21447e3fad6a6321b9fd83ae42d064d",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-006",
+    "title": "Tampering: Stored script in note text executes in the browser (XSS)",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "An attacker saves a note with HTML or script content. If the app renders it as HTML without encoding, it runs in the owner's session and can steal data or perform actions.\n\nFramework stride, element 'Web app', likelihood medium, impact high, rated high.",
+    "remediation": "- Return notes as JSON or plain text, or output-encode contextually when rendering HTML. (ASVS V1.2.1, V1.1.2)\n- Set X-Content-Type-Options nosniff and a restrictive Content-Security-Policy. (ASVS V3.4.4, V3.4.3)",
+    "fingerprint": "76807e1721fdf6ad6a9e30f50ce077b5b21447e3fad6a6321b9fd83ae42d064d",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "76807e1721fdf6ad6a9e30f50ce077b5b21447e3fad6a6321b9fd83ae42d064d"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:792812d79293d09aef7aa5c13118b3b330768ea45eca80bafd8130143c034b2e",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-004",
+    "title": "Elevation of privilege: Missing ownership check on edit and delete lets users modify others' notes",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "A user sends PUT or DELETE with a victim's note id, or includes an owner_id field to reassign a note. Without an ownership check on every write, they gain write access to notes they do not own.\n\nFramework stride, element 'Web app', likelihood high, impact high, rated critical.",
+    "remediation": "- Enforce ownership in the data-access layer on every update and delete, with the owner id in the query condition, and never allow owner reassignment. (ASVS V8.2.2, V8.3.1, V8.2.1)",
+    "fingerprint": "792812d79293d09aef7aa5c13118b3b330768ea45eca80bafd8130143c034b2e",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "792812d79293d09aef7aa5c13118b3b330768ea45eca80bafd8130143c034b2e"
     ],
     "suppressed": false
   },
@@ -280,6 +420,62 @@
     "suppressed": false
   },
   {
+    "id": "threat-model:c2e9633366a746b793bace4f786e2bdcd9e93fd8f295b803b988702b45f9581a",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-003",
+    "title": "Information disclosure: Insecure direct object reference exposes other users' notes",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "An attacker changes the note id in GET requests or enumerates ids to read another user's private notes. The list endpoint could also return notes unfiltered by owner.\n\nFramework stride, element 'Notes request', likelihood high, impact high, rated critical.",
+    "remediation": "- Filter every read and list query by the session owner id and return 404 for notes the caller does not own. (ASVS V8.2.2, V8.3.1, V4.2.1)\n- Do not rely on id secrecy; use unguessable ids as defence in depth. (ASVS V8.2.2)",
+    "fingerprint": "c2e9633366a746b793bace4f786e2bdcd9e93fd8f295b803b988702b45f9581a",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "c2e9633366a746b793bace4f786e2bdcd9e93fd8f295b803b988702b45f9581a"
+    ],
+    "suppressed": false
+  },
+  {
+    "id": "threat-model:da264f0ddcdd4e34994ae2b7299cf79277beb6bcec47778541e8a478561d6cf5",
+    "stage": "threat-model",
+    "tool": "threat-model",
+    "source": "ai-threat-model",
+    "rule_id": "TM-012",
+    "title": "Information disclosure: Unauthorized responses reveal whether a note or account exists",
+    "severity": "info",
+    "location": {
+      "path": "security/threats.json",
+      "start_line": null,
+      "end_line": null
+    },
+    "cwe": [],
+    "description": "Differing status codes or messages for missing versus forbidden resources let an attacker enumerate valid note ids or users.\n\nFramework stride, element 'Unauthorized response', likelihood low, impact low, rated low.",
+    "remediation": "- Return identical generic 401 or 404 responses without revealing existence or details. (ASVS V16.5.1, V8.2.2)",
+    "fingerprint": "da264f0ddcdd4e34994ae2b7299cf79277beb6bcec47778541e8a478561d6cf5",
+    "tools": [
+      "threat-model"
+    ],
+    "stages": [
+      "threat-model"
+    ],
+    "merged_fingerprints": [
+      "da264f0ddcdd4e34994ae2b7299cf79277beb6bcec47778541e8a478561d6cf5"
+    ],
+    "suppressed": false
+  },
+  {
     "id": "threat-model:da8b95c65f09cbbdca7f74b2c539811de35a45b92ec80cdb2fc5e525f8f16437",
     "stage": "threat-model",
     "tool": "threat-model",
@@ -293,7 +489,7 @@
       "end_line": null
     },
     "cwe": [],
-    "description": "Session identifiers travel with each notes request. The notes router trusts an injected session resolver, and the code does not set cookie attributes or session lifetime. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.\n\nFramework stride, element 'Notes request', likelihood medium, impact high, rated high.",
+    "description": "Session identifiers travel with each notes request. If cookies lack Secure/HttpOnly/SameSite flags, or session ids are predictable or never rotated, an attacker can steal or forge a session and read or change another user's private notes.\n\nFramework stride, element 'Notes request', likelihood medium, impact high, rated high.",
     "remediation": "- Use high-entropy random session ids and set Secure, HttpOnly and SameSite cookie attributes; expire sessions on logout and idle timeout. (ASVS V7.2.1, V7.2.3, V3.3.1, V7.4.1)\n- Serve all notes endpoints over TLS only and send HSTS. (ASVS V12.2.1, V3.4.1)",
     "fingerprint": "da8b95c65f09cbbdca7f74b2c539811de35a45b92ec80cdb2fc5e525f8f16437",
     "tools": [
